@@ -31,6 +31,7 @@ export function generateStopka(
   const wzty: Content[] = generateWZ(wz);
   const rejestry: Content[] = generateRejestry(stopka);
   const informacje: Content[] = generateInformacje(stopka);
+  const srcs: Content[] = generateSrcs(additionalData);
   const qrCode: Content[] = generateQRCodeData(additionalData);
   const qr2Code: Content[] = generateQR2CodeData(additionalData);
   const zalaczniki: Content[] = !additionalData?.isMobile ? generateZalaczniki(zalacznik) : [];
@@ -55,6 +56,7 @@ export function generateStopka(
       false,
       [0, 0, 0, 0]
     ),
+    ...srcs,
   ];
 
   return createSection(result, false);
@@ -116,6 +118,40 @@ function generateInformacje(stopka?: Stopka): Content[] {
   if (content.fieldsWithValue.length && content.content) {
     result.push(createHeader('Pozostałe informacje'));
     result.push(content.content);
+  }
+  return result;
+}
+
+function generateSrcs(additionalData?: AdditionalDataTypes): Content[] {
+  const result: Content[] = [];
+  
+  if (additionalData?.source) {
+    result.push(
+      createSection(
+        [
+          {
+            stack: createLabelText('Pobrano z : ', additionalData.source),
+            margin: [0, 8, 0, 0],
+          },
+        ],
+        true,
+        [0, 0, 0, 0]
+      ),   
+    );
+  }
+  if (additionalData?.notes) {
+    result.push(
+      createSection(
+        [
+          {
+            stack: createLabelText('Dekretacja/Notes : ', additionalData.notes),
+            margin: [0, 8, 0, 0],
+          },
+        ],
+        true,
+        [0, 0, 0, 0]
+      ),   
+    );
   }
   return result;
 }

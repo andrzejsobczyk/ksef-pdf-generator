@@ -54,6 +54,9 @@ export class CliApplication {
       .option('--qr-code <url>', 'URL do kodu QR faktury')
       .option('--qr2-code <url>', 'URL do kodu QR certyfikatu')
       .option('--qr-code2 <url>', 'URL do kodu QR certyfikatu DEPRECATED - użyj --qr2-code')
+      .option('--source <url>', 'URL do strony')
+      .option('--notes <text>', 'Dekretacja dla księgowości')      
+      
       .action(async (input: string, output: string, options: any) => {
         try {
           const additionalData: any = {};
@@ -70,6 +73,15 @@ export class CliApplication {
           if (options.qr2Code) {
             additionalData.qr2Code = options.qr2Code;
           }
+
+          if (options.source) {
+            additionalData.source = options.source;
+          }
+          
+          if (options.notes) {
+            additionalData.notes = options.notes;
+          }
+
 
           if (!this.invoiceGenerator) {
             throw new Error('Generator faktur nie został zainicjalizowany');
